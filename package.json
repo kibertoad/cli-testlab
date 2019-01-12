@@ -1,0 +1,34 @@
+{
+  "name": "cli-testlab",
+  "version": "1.0.0",
+  "author": {
+    "name": "Igor Savin",
+    "web": "https://github.com/kibertoad"
+  },
+  "scripts": {
+    "test-cli": "jake -f tests/integration/Jakefile",
+    "test": "mocha ./test",
+    "test-coverage": "nyc npm test",
+    "lint": "eslint .",
+    "prettier": "prettier --write \"{lib,tests}/**/*.{js,ts}\"",
+    "test-travis": "npm run lint && npm run test-cli"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kibertoad/cli-testlab.git"
+  },
+  "dependencies": {
+    "jake": "^8.0.19",
+    "rimraf": "^2.6.3"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "commander": "^2.19.0",
+    "eslint": "5.10.0",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "prettier": "^1.15.3",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0"
+  }
+}
