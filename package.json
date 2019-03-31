@@ -6,29 +6,33 @@
     "web": "https://github.com/kibertoad"
   },
   "scripts": {
-    "test-cli": "jake -f tests/integration/Jakefile",
     "test": "mocha ./test",
-    "test-coverage": "nyc npm test",
+    "test:cli": "jake -f test/integration/Jakefile",
+    "test:coverage": "nyc npm test",
+    "test:travis": "npm run lint && npm run test-cli",
     "lint": "eslint .",
-    "prettier": "prettier --write \"{lib,tests}/**/*.{js,ts}\"",
-    "test-travis": "npm run lint && npm run test-cli"
+    "prettier": "prettier --write \"{lib,tests}/**/*.{js,ts}\""
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/kibertoad/cli-testlab.git"
   },
+  "engines": {
+    "node": ">=6"
+  },
   "dependencies": {
-    "jake": "^8.0.19",
+    "jake": "^8.1.1",
+    "mkdirp-promise": "^5.0.1",
     "rimraf": "^2.6.3"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "commander": "^2.19.0",
-    "eslint": "5.10.0",
-    "eslint-config-prettier": "^3.3.0",
+    "eslint": "5.16.0",
+    "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-prettier": "^3.0.1",
-    "prettier": "^1.15.3",
-    "mocha": "^5.2.0",
-    "nyc": "^13.1.0"
+    "prettier": "^1.16.4",
+    "mocha": "^6.0.2",
+    "nyc": "^13.3.0"
   }
 }
