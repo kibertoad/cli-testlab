@@ -1,1 +1,3 @@
-describe('testlab', () => {});
+describe('testlab', () => {
+  it('dummy', () => {});
+});

@@ -1,7 +1,7 @@
-const {runNodeCLIApp} = require('../../index')
+const { runNodeCLIApp } = require('../../index');
 
 function runQuote() {
-    runNodeCLIApp('../apps/nietzscheApp', ['quote', '-z']);
+  runNodeCLIApp('../apps/nietzscheApp', ['quote', '-z']);
 }
 
 runQuote();

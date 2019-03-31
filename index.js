@@ -1,5 +1,5 @@
-const {runNodeCLIApp} = require('./lib/utils/runNodeCLIApp')
+const { runNodeCLIApp } = require('./lib/utils/runNodeCLIApp');
 
 module.exports = {
-    runNodeCLIApp
+  runNodeCLIApp
 };

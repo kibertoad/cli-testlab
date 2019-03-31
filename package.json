@@ -6,12 +6,12 @@
     "web": "https://github.com/kibertoad"
   },
   "scripts": {
-    "test": "mocha ./test",
+    "test": "mocha ./test/unit",
     "test:cli": "jake -f test/integration/Jakefile",
     "test:coverage": "nyc npm test",
-    "test:travis": "npm run lint && npm run test-cli",
+    "test:ci": "npm run lint && npm run test:coverage && npm run test-cli",
     "lint": "eslint .",
-    "prettier": "prettier --write \"{lib,tests}/**/*.{js,ts}\""
+    "prettier": "prettier --write \"{lib,test}/**/*.{js,ts}\" \"index.js\""
   },
   "repository": {
     "type": "git",
@@ -34,5 +34,22 @@
     "prettier": "^1.16.4",
     "mocha": "^6.0.2",
     "nyc": "^13.3.0"
+  },
+  "nyc": {
+    "description": "test coverage",
+    "exclude": [
+      "node_modules",
+      "test"
+    ],
+    "reporter": [
+      "text"
+    ],
+    "cache": true,
+    "all": true,
+    "check-coverage": false,
+    "lines": 70,
+    "statements": 70,
+    "functions": 80,
+    "branches": 55
   }
 }

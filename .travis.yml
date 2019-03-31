@@ -7,7 +7,7 @@ node_js:
   - '10'
   - '11'
 script:
-  - npm run-script test:travis
+  - npm run-script test:ci
 
 notifications:
   email: true
