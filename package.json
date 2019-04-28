@@ -9,7 +9,7 @@
     "build": "del-cli dist/ && tsc",
     "test": "jest --config=jest.config.json --runInBand",
     "test:coverage": "jest --config=jest.config.json --coverage --runInBand",
-    "test:ci": "npm run eslint && npm run test:coverage && npm run test:cli",
+    "test:ci": "npm run eslint && npm run test:coverage && npm run build && npm run test:cli",
     "test:cli": "jake -f test/integration/Jakefile",
     "eslint": "eslint --format codeframe \"lib/**/*.ts\" \"test/**/*.ts\" \"test/**/*.js\"",
     "prettier": "prettier --write \"{lib,test}/**/*.{js,ts}\""
