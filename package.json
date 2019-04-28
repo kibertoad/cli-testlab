@@ -6,12 +6,13 @@
     "web": "https://github.com/kibertoad"
   },
   "scripts": {
-    "test": "mocha ./test/unit",
+    "build": "del-cli dist/ && tsc",
+    "test": "jest --config=jest.config.json --runInBand",
+    "test:coverage": "jest --config=jest.config.json --coverage --runInBand",
+    "test:ci": "npm run eslint && npm run test:coverage && npm run test:cli",
     "test:cli": "jake -f test/integration/Jakefile",
-    "test:coverage": "nyc npm test",
-    "test:ci": "npm run lint && npm run test:coverage && npm run test:cli",
-    "lint": "eslint .",
-    "prettier": "prettier --write \"{lib,test}/**/*.{js,ts}\" \"index.js\""
+    "eslint": "eslint --format codeframe \"lib/**/*.ts\" \"test/**/*.ts\" \"test/**/*.js\"",
+    "prettier": "prettier --write \"{lib,test}/**/*.{js,ts}\""
   },
   "repository": {
     "type": "git",
@@ -26,30 +27,19 @@
     "rimraf": "^2.6.3"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "commander": "^2.19.0",
+    "@typescript-eslint/eslint-plugin": "^1.7.0",
+    "@typescript-eslint/parser": "^1.7.0",
+    "@types/jest": "^24.0.11",
+    "@types/node": "^10.14.6",
+    "@types/rimraf": "^2.0.2",
+    "commander": "^2.20.0",
+    "del-cli": "^1.1.0",
     "eslint": "5.16.0",
-    "eslint-config-prettier": "^4.1.0",
+    "eslint-config-prettier": "^4.2.0",
     "eslint-plugin-prettier": "^3.0.1",
-    "prettier": "^1.16.4",
-    "mocha": "^6.0.2",
-    "nyc": "^13.3.0"
-  },
-  "nyc": {
-    "description": "test coverage",
-    "exclude": [
-      "node_modules",
-      "test"
-    ],
-    "reporter": [
-      "text"
-    ],
-    "cache": true,
-    "all": true,
-    "check-coverage": false,
-    "lines": 70,
-    "statements": 70,
-    "functions": 80,
-    "branches": 55
+    "jest": "^24.7.1",
+    "prettier": "^1.17.0",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.4.5"
   }
 }

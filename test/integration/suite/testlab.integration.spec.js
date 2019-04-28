@@ -1,8 +1,7 @@
 'use strict';
 
 const path = require('path');
-const { assertExec, assertExecError, test } = require('../../../lib/migration-test-helper');
-const { assert } = require('chai');
+const { assertExec, assertExecError, test } = require('../../../dist/lib/migration-test-helper');
 
 const pathToApp = path.normalize(__dirname + '/../cli/basic.cli.app.js');
 

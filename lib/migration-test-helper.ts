@@ -1,40 +1,51 @@
-const os = require('os');
-const fs = require('fs');
-const rimrafSync = require('rimraf').sync;
+import os from 'os';
+import fs from 'fs';
+import { sync as rimrafSync } from 'rimraf';
 
-function assertExec(cmd, desc) {
-  desc = desc || 'Run ' + cmd;
+declare global {
+  // @ts-ignore
+  const jake: any;
+  // @ts-ignore
+  const task: any;
+  // @ts-ignore
+  const desc: any;
+}
+
+export function assertExec(cmd: string, description?: string) {
+  description = description || 'Run ' + cmd;
   return new Promise((resolve, reject) => {
     let stderr = '';
     let stdout = '';
     // console.log(`Executing: ${cmd}`);
     const bin = jake.createExec([cmd]);
-    bin.addListener('error', (msg, code) => reject(Error(desc + ' FAIL. ' + stderr)));
-    bin.addListener('cmdEnd', cmd => resolve({ cmd, stdout, stderr }));
-    bin.addListener('stdout', data => (stdout += data.toString()));
-    bin.addListener('stderr', data => (stderr += data.toString()));
+    bin.addListener('error', (_msg: string, _code: any) =>
+      reject(Error(description + ' FAIL. ' + stderr))
+    );
+    bin.addListener('cmdEnd', (cmd: string) => resolve({ cmd, stdout, stderr }));
+    bin.addListener('stdout', (data: any) => (stdout += data.toString()));
+    bin.addListener('stderr', (data: any) => (stderr += data.toString()));
     bin.run();
   });
 }
 
-function assertExecError(cmd, desc) {
-  desc = desc || 'Run ' + cmd;
-  return new Promise((resolve, reject) => {
+export function assertExecError(cmd: string, description?: string) {
+  description = description || 'Run ' + cmd;
+  return new Promise((resolve, _reject) => {
     let stderr = '';
     // console.log(`Executing: ${cmd}`);
     const bin = jake.createExec([cmd]);
-    bin.addListener('error', (msg, code) => {
+    bin.addListener('error', (_msg: string, _code: any) => {
       resolve(stderr);
     });
     bin.addListener('cmdEnd', () => {
       throw new Error('Error was expected, but none thrown');
     });
-    bin.addListener('stderr', data => (stderr += data.toString()));
+    bin.addListener('stderr', (data: any) => (stderr += data.toString()));
     bin.run();
   });
 }
 
-function test(taskList, description, func) {
+export function test(taskList: any[], description: string, func: Function) {
   const tmpDirPath = os.tmpdir() + '/knex-test-';
   rimrafSync(tmpDirPath);
   const tempFolder = fs.mkdtempSync(tmpDirPath);
@@ -47,7 +58,7 @@ function test(taskList, description, func) {
       .then(() => {
         console.log('☑ ' + description);
       })
-      .catch(err => {
+      .catch((err: Error) => {
         console.log('☒ ' + err.message);
         itFails = true;
       })
@@ -60,9 +71,3 @@ function test(taskList, description, func) {
       });
   });
 }
-
-module.exports = {
-  assertExec,
-  assertExecError,
-  test
-};
