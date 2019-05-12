@@ -47,7 +47,7 @@ export function execCommand(
       }
 
       // Error is not expected
-      return reject(Error(`${description} -> FAIL. ${EOL}Error: ' + stderr`))
+      return reject(Error(`${description} -> FAIL. ${EOL}Stdout: ${stdout} ${EOL}Error: ${stderr}`))
     })
     bin.addListener('cmdEnd', (_cmd: string) => {
       if (expectedErrorMessage) {
