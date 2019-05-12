@@ -1,3 +1,8 @@
-import { runNodeCLIApp } from './lib/utils/runNodeCLIApp';
+import { runNodeCLIApp } from './lib/utils/runNodeCLIApp'
+import { assertExec, assertExecError } from './lib/migration-test-helper'
 
-export { runNodeCLIApp }
+export {
+  runNodeCLIApp,
+  assertExec,
+  assertExecError
+}
