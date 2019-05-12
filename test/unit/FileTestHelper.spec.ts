@@ -45,4 +45,15 @@ describe('FileTestHelper', () => {
       expect(helper.fileExists('dummy.txt')).toEqual(false)
     })
   })
+
+  describe('registerForCleanup', () => {
+    it('happy path', () => {
+      const helper = new FileTestHelper()
+      fs.writeFileSync('dummy.txt', 'test')
+      helper.registerForCleanup('dummy.txt')
+      expect(helper.fileExists('dummy.txt')).toEqual(true)
+      helper.cleanup()
+      expect(helper.fileExists('dummy.txt')).toEqual(false)
+    })
+  })
 })

@@ -4,7 +4,7 @@ import fs from 'fs'
 
 export class FileTestHelper {
   private basePath: string
-  private createdFiles: string[] = []
+  private filesToCleanup: string[] = []
 
   public constructor(basePath: string = './') {
     this.basePath = basePath
@@ -20,14 +20,30 @@ export class FileTestHelper {
     return fs.readFileSync(targetPath).toString()
   }
 
-  public createFile(filePath: string, fileContent: any) {
+  /**
+   * Create file and (optionally) register it for later cleanup
+   */
+  public createFile(filePath: string, fileContent: any, willBeCleanedUp: boolean = true) {
+    if (willBeCleanedUp) {
+      this.registerForCleanup(filePath)
+    }
     const targetPath = path.resolve(this.basePath, filePath)
-    this.createdFiles.push(targetPath)
     fs.writeFileSync(targetPath, fileContent)
   }
 
+  /**
+   * Add path to a file that should be deleted after calling cleanup command
+   */
+  public registerForCleanup(filePath: string) {
+    const targetPath = path.resolve(this.basePath, filePath)
+    this.filesToCleanup.push(targetPath)
+  }
+
+  /**
+   * Delete all files that were created by this helper or explicitly added to cleanup list
+   */
   public cleanup() {
-    this.createdFiles.forEach(filePath => {
+    this.filesToCleanup.forEach(filePath => {
       rimrafSync(filePath)
     })
   }
