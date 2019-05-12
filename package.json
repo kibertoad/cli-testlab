@@ -1,10 +1,11 @@
 {
   "name": "cli-testlab",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Igor Savin",
     "web": "https://github.com/kibertoad"
   },
+  "main": "dist/index.js",
   "scripts": {
     "build": "del-cli dist/ && tsc && copyfiles test/util/apps/*.js dist",
     "prepublishOnly": "npm run build",
