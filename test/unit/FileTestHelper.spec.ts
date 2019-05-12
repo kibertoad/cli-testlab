@@ -36,6 +36,16 @@ describe('FileTestHelper', () => {
     })
   })
 
+  describe('deleteFile', () => {
+    it('happy path', () => {
+      const helper = new FileTestHelper()
+      helper.createFile('dummy.txt', 'test')
+      expect(helper.fileExists('dummy.txt')).toEqual(true)
+      helper.deleteFile('dummy.txt')
+      expect(helper.fileExists('dummy.txt')).toEqual(false)
+    })
+  })
+
   describe('cleanup', () => {
     it('happy path', () => {
       const helper = new FileTestHelper()

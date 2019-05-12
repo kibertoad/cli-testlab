@@ -20,6 +20,21 @@ export class FileTestHelper {
     return fs.readFileSync(targetPath).toString()
   }
 
+  public deleteFile(
+    filePath: string,
+    {
+      isPathAbsolute = false
+    }: {
+      isPathAbsolute?: boolean
+    } = {}
+  ): void {
+    const targetPath = isPathAbsolute ? filePath : path.resolve(this.basePath, filePath)
+
+    if (fs.existsSync(targetPath)) {
+      fs.unlinkSync(targetPath)
+    }
+  }
+
   /**
    * Create file and (optionally) register it for later cleanup
    */
