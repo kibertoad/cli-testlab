@@ -1,4 +1,5 @@
 import { AssertionError } from './AssertionError'
+import { EOL } from 'os'
 
 require('jake')
 
@@ -31,7 +32,7 @@ export function execCommand(
     expectedOutput?: string
   } = {}
 ): Promise<ExecResult> {
-  description = description || 'Run ' + cliCommand
+  description = description || cliCommand
   return new Promise((resolve, reject) => {
     let stderr = ''
     let stdout = ''
@@ -46,7 +47,7 @@ export function execCommand(
       }
 
       // Error is not expected
-      return reject(Error(description + ' FAIL. ' + stderr))
+      return reject(Error(`${description} -> FAIL. ${EOL}Error: ' + stderr`))
     })
     bin.addListener('cmdEnd', (_cmd: string) => {
       if (expectedErrorMessage) {
