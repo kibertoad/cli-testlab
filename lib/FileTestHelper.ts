@@ -10,12 +10,12 @@ export class FileTestHelper {
     this.basePath = basePath
   }
 
-  public fileExists(filePath: string) {
+  public fileExists(filePath: string): boolean {
     const targetPath = path.resolve(this.basePath, filePath)
     return fs.existsSync(targetPath)
   }
 
-  public getFileTextContent(filePath: string) {
+  public getFileTextContent(filePath: string): string {
     const targetPath = path.resolve(this.basePath, filePath)
     return fs.readFileSync(targetPath).toString()
   }
@@ -23,26 +23,43 @@ export class FileTestHelper {
   /**
    * Create file and (optionally) register it for later cleanup
    */
-  public createFile(filePath: string, fileContent: any, willBeCleanedUp: boolean = true) {
+  public createFile(
+    filePath: string,
+    fileContent: any,
+    {
+      willBeCleanedUp = true,
+      isPathAbsolute = false
+    }: {
+      willBeCleanedUp?: boolean
+      isPathAbsolute?: boolean
+    } = {}
+  ): void {
     if (willBeCleanedUp) {
-      this.registerForCleanup(filePath)
+      this.registerForCleanup(filePath, { isPathAbsolute })
     }
-    const targetPath = path.resolve(this.basePath, filePath)
+    const targetPath = isPathAbsolute ? filePath : path.resolve(this.basePath, filePath)
     fs.writeFileSync(targetPath, fileContent)
   }
 
   /**
    * Add path to a file that should be deleted after calling cleanup command
    */
-  public registerForCleanup(filePath: string) {
-    const targetPath = path.resolve(this.basePath, filePath)
+  public registerForCleanup(
+    filePath: string,
+    {
+      isPathAbsolute = false
+    }: {
+      isPathAbsolute?: boolean
+    } = {}
+  ): void {
+    const targetPath = isPathAbsolute ? filePath : path.resolve(this.basePath, filePath)
     this.filesToCleanup.push(targetPath)
   }
 
   /**
    * Delete all files that were created by this helper or explicitly added to cleanup list
    */
-  public cleanup() {
+  public cleanup(): void {
     this.filesToCleanup.forEach(filePath => {
       rimrafSync(filePath)
     })
