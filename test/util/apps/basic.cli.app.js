@@ -1,12 +1,15 @@
 const program = require('commander')
 
+program.version('1.0.0')
+
 program
-  .version('1.0.0')
   .command('error <message>')
   .description('Throw given error')
   .action(message => {
     throw new Error(message)
   })
+
+program
   .command('message <message>')
   .description('Print given message')
   .action(message => {
@@ -15,5 +18,3 @@ program
   })
 
 program.parse(process.argv)
-
-console.log('haha')
