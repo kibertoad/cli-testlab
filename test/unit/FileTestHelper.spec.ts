@@ -10,6 +10,13 @@ describe('FileTestHelper', () => {
       expect(content).toEqual('test')
       helper.cleanup()
     })
+
+    it('happy path with subdir', () => {
+      const helper = new FileTestHelper()
+      helper.createFile('tempdir/dummy123.txt', 'test')
+      expect(helper.fileExists('tempdir/dummy123.txt')).toEqual(true)
+      helper.cleanup()
+    })
   })
 
   describe('getFileTextContent', () => {
@@ -46,6 +53,16 @@ describe('FileTestHelper', () => {
     })
   })
 
+  describe('deleteFileGlob', () => {
+    it('happy path', () => {
+      const helper = new FileTestHelper()
+      helper.createFile('dummy123.txt', 'test')
+      expect(helper.fileExists('dummy123.txt')).toEqual(true)
+      helper.deleteFileGlob('dummy*.txt')
+      expect(helper.fileExists('dummy123.txt')).toEqual(false)
+    })
+  })
+
   describe('cleanup', () => {
     it('happy path', () => {
       const helper = new FileTestHelper()
@@ -64,6 +81,28 @@ describe('FileTestHelper', () => {
       expect(helper.fileExists('dummy.txt')).toEqual(true)
       helper.cleanup()
       expect(helper.fileExists('dummy.txt')).toEqual(false)
+    })
+  })
+
+  describe('registerGlobForCleanup', () => {
+    it('happy path', () => {
+      const helper = new FileTestHelper()
+      fs.writeFileSync('dummy123.txt', 'test')
+      helper.registerGlobForCleanup('dummy*.txt')
+      expect(helper.fileExists('dummy123.txt')).toEqual(true)
+      helper.cleanup()
+      expect(helper.fileExists('dummy123.txt')).toEqual(false)
+    })
+
+    it('happy path with subdir', () => {
+      const helper = new FileTestHelper()
+      helper.createFile('tempdir/dummy123.txt', 'test')
+
+      const helper2 = new FileTestHelper()
+      helper2.registerGlobForCleanup('tempdir/dummy*.txt')
+      expect(helper2.fileExists('tempdir/dummy123.txt')).toEqual(true)
+      helper2.cleanup()
+      expect(helper2.fileExists('tempdir/dummy123.txt')).toEqual(false)
     })
   })
 })
