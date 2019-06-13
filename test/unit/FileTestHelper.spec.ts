@@ -43,6 +43,22 @@ describe('FileTestHelper', () => {
     })
   })
 
+  describe('fileGlobExists', () => {
+    it('happy path', () => {
+      const helper = new FileTestHelper()
+      helper.createFile('dummy123.txt', 'test')
+      expect(helper.fileGlobExists('dummy*.txt')).toEqual(1)
+      helper.cleanup()
+    })
+
+    it('file does not exist', () => {
+      const helper = new FileTestHelper()
+      helper.createFile('dummy123.txt', 'test')
+      expect(helper.fileGlobExists('dummy2*.txt')).toEqual(0)
+      helper.cleanup()
+    })
+  })
+
   describe('deleteFile', () => {
     it('happy path', () => {
       const helper = new FileTestHelper()

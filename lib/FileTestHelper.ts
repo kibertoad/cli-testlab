@@ -2,6 +2,7 @@ import * as del from 'del'
 import { sync as rimrafSync } from 'rimraf'
 import path from 'path'
 import fs from 'fs'
+import * as globule from 'globule'
 
 export class FileTestHelper {
   private basePath: string
@@ -15,6 +16,10 @@ export class FileTestHelper {
   public fileExists(filePath: string): boolean {
     const targetPath = path.resolve(this.basePath, filePath)
     return fs.existsSync(targetPath)
+  }
+
+  public fileGlobExists(fileGlobPath: string): number {
+    return globule.find(fileGlobPath).length
   }
 
   public getFileTextContent(filePath: string): string {
