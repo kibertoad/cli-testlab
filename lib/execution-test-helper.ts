@@ -56,7 +56,7 @@ export function execCommand(
 
       if (expectedOutput) {
         if (!stdout.includes(expectedOutput)) {
-          throw new AssertionError(`Expect error to include "${expectedOutput}", but it was actually "${stdout}"`)
+          throw new AssertionError(`Expect output to include "${expectedOutput}", but it was actually "${stdout}"`)
         }
         return resolve({ stdout, stderr })
       }
