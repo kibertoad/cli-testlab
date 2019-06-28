@@ -29,6 +29,26 @@ describe('FileTestHelper', () => {
     })
   })
 
+  describe('getFileGlobTextContent', () => {
+    it('happy path', () => {
+      const helper = new FileTestHelper()
+      helper.createFile('dummy123.txt', 'test')
+      const content = helper.getFileGlobTextContent('dummy*.txt')
+      expect(content.length).toEqual(1)
+      expect(content[0]).toEqual('test')
+      helper.cleanup()
+    })
+
+    it('works with base path', () => {
+      const helper = new FileTestHelper('pandas')
+      helper.createFile('bears123.txt', 'test')
+      const content = helper.getFileGlobTextContent('pandas/bears*.txt')
+      expect(content.length).toEqual(1)
+      expect(content[0]).toEqual('test')
+      helper.cleanup()
+    })
+  })
+
   describe('fileExists', () => {
     it('happy path', () => {
       const helper = new FileTestHelper()

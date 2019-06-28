@@ -27,6 +27,12 @@ export class FileTestHelper {
     return fs.readFileSync(targetPath).toString()
   }
 
+  public getFileGlobTextContent(fileGlobPath: string): string[] {
+    return globule.find(fileGlobPath).map(resolvedPath => {
+      return fs.readFileSync(resolvedPath).toString()
+    })
+  }
+
   public deleteFile(
     filePath: string,
     {
