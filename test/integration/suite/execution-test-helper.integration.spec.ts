@@ -15,4 +15,10 @@ describe('execution-test-helper', () => {
       expectedOutput: 'OK'
     })
   })
+
+  it('does not include unexpected text', async () => {
+    return execCommand(`node ${pathToApp} message OK`, {
+      notExpectedOutput: 'error'
+    })
+  })
 })
