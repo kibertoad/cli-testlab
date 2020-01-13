@@ -22,11 +22,13 @@ export function execCommand(
   {
     description,
     expectedErrorMessage,
-    expectedOutput
+    expectedOutput,
+    notExpectedOutput
   }: {
     description?: string
     expectedErrorMessage?: string
     expectedOutput?: string
+    notExpectedOutput?: string
   } = {}
 ): Promise<ExecResult> {
   description = description || cliCommand
@@ -53,7 +55,16 @@ export function execCommand(
 
       if (expectedOutput) {
         if (!stdout.includes(expectedOutput)) {
-          throw new AssertionError(`Expect output to include "${expectedOutput}", but it was actually "${stdout}"`)
+          throw new AssertionError(`Expected output to include "${expectedOutput}", but it was actually "${stdout}"`)
+        }
+        return resolve({ stdout, stderr })
+      }
+
+      if (notExpectedOutput) {
+        if (stdout.includes(notExpectedOutput)) {
+          throw new AssertionError(
+            `Expected output not to include "${notExpectedOutput}", but it was actually "${stdout}"`
+          )
         }
         return resolve({ stdout, stderr })
       }
