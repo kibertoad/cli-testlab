@@ -4,11 +4,8 @@ import { EOL } from 'os'
 require('jake')
 
 declare global {
-  // @ts-ignore
   const jake: any
-  // @ts-ignore
   const task: any
-  // @ts-ignore
   const desc: any
 }
 
