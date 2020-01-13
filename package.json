@@ -51,6 +51,8 @@
   "files": [
     "README.md",
     "LICENSE",
-    "dist/*"
+    "dist/lib/*",
+    "dist/index.js",
+    "dist/index.d.ts"
   ]
 }
