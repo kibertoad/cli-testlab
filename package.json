@@ -8,7 +8,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc && copyfiles test/util/apps/*.js dist",
+    "build": "del-cli dist/ && tsc && copyfiles test/util/apps/*.js dist",
     "prepublishOnly": "npm run build",
     "test": "jest --config=jest.config.json --runInBand",
     "test:coverage": "jest --config=jest.config.json --coverage --runInBand",
@@ -39,6 +39,7 @@
     "@types/rimraf": "^2.0.2",
     "commander": "^4.1.0",
     "copyfiles": "^2.1.1",
+    "del-cli": "^2.0.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-prettier": "^3.1.2",
