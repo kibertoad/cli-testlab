@@ -9,7 +9,7 @@ export class FileTestHelper {
   private filesToCleanup: string[] = []
   private fileGlobsToCleanup: string[] = []
 
-  public constructor(basePath: string = './') {
+  public constructor(basePath = './') {
     this.basePath = basePath
   }
 
