@@ -63,6 +63,20 @@ describe('FileTestHelper', () => {
     })
   })
 
+  describe('fileNotExists', () => {
+    it('happy path', () => {
+      const helper = new FileTestHelper()
+      helper.createFile('dummy.txt', 'test')
+      expect(helper.fileNotExists('dummy.txt')).toEqual(false)
+      helper.cleanup()
+    })
+
+    it('file does not exist', () => {
+      const helper = new FileTestHelper()
+      expect(helper.fileNotExists('dummy.txt')).toEqual(true)
+    })
+  })
+
   describe('fileGlobExists', () => {
     it('happy path', () => {
       const helper = new FileTestHelper()

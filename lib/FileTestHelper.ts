@@ -18,6 +18,10 @@ export class FileTestHelper {
     return fs.existsSync(targetPath)
   }
 
+  public fileNotExists(filePath: string): boolean {
+    return !this.fileExists(filePath)
+  }
+
   public fileGlobExists(fileGlobPath: string): number {
     return globule.find(fileGlobPath).length
   }
