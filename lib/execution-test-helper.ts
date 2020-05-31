@@ -21,7 +21,11 @@ function toStringArray(value?: string | string[]): string[] | undefined {
   return value
 }
 
-function assertErrorMessages(msg: string, expectedErrorMessage: string[] | string | undefined, rejectFn: Function) {
+function assertErrorMessages(
+  msg: string,
+  expectedErrorMessage: string[] | string | undefined,
+  rejectFn: (error: AssertionError) => void
+) {
   const expectedErrorMessages = toStringArray(expectedErrorMessage)
 
   const errors: string[] = []
@@ -37,7 +41,11 @@ function assertErrorMessages(msg: string, expectedErrorMessage: string[] | strin
   }
 }
 
-function assertOutput(stdout: string, expectedOutput: string[] | string | undefined, rejectFn: Function) {
+function assertOutput(
+  stdout: string,
+  expectedOutput: string[] | string | undefined,
+  rejectFn: (error: AssertionError) => void
+) {
   const expectedOutputs = toStringArray(expectedOutput)
 
   const errors: string[] = []
@@ -53,7 +61,11 @@ function assertOutput(stdout: string, expectedOutput: string[] | string | undefi
   }
 }
 
-function assertNotOutput(stdout: string, notExpectedOutput: string[] | string | undefined, rejectFn: Function) {
+function assertNotOutput(
+  stdout: string,
+  notExpectedOutput: string[] | string | undefined,
+  rejectFn: (error: AssertionError) => void
+) {
   const notExpectedOutputs = toStringArray(notExpectedOutput)
 
   const errors: string[] = []
@@ -78,7 +90,7 @@ export function execCommand(
     description,
     expectedErrorMessage,
     expectedOutput,
-    notExpectedOutput
+    notExpectedOutput,
   }: {
     description?: string
     expectedErrorMessage?: string | string[]

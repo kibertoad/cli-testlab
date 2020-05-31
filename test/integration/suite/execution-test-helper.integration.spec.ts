@@ -6,25 +6,25 @@ const pathToApp = path.normalize(__dirname + '/../../util/apps/basic.cli.app.js'
 describe('execution-test-helper', () => {
   it('executes with an error', async () => {
     await execCommand(`node ${pathToApp} error Kaboom`, {
-      expectedErrorMessage: 'Kaboom'
+      expectedErrorMessage: 'Kaboom',
     })
   })
 
   it('supports multiple error assertions', async () => {
     await execCommand(`node ${pathToApp} error Crash-and-burn`, {
-      expectedErrorMessage: ['Crash', 'burn']
+      expectedErrorMessage: ['Crash', 'burn'],
     })
   })
 
   it('executes without an error', async () => {
     await execCommand(`node ${pathToApp} message OK`, {
-      expectedOutput: 'OK'
+      expectedOutput: 'OK',
     })
   })
 
   it('supports multiple assertions', async () => {
     await execCommand(`node ${pathToApp} message OK-and-fine`, {
-      expectedOutput: ['OK', 'fine']
+      expectedOutput: ['OK', 'fine'],
     })
   })
 
@@ -33,7 +33,7 @@ describe('execution-test-helper', () => {
 
     try {
       await execCommand(`node ${pathToApp} message OK`, {
-        notExpectedOutput: 'OK'
+        notExpectedOutput: 'OK',
       })
     } catch (err) {
       expect(err.message.startsWith('Expected output not to include "OK", but it was actually "OK')).toBeTruthy()
@@ -42,13 +42,13 @@ describe('execution-test-helper', () => {
 
   it('does not include unexpected text', async () => {
     await execCommand(`node ${pathToApp} message OK`, {
-      notExpectedOutput: 'error'
+      notExpectedOutput: 'error',
     })
   })
 
   it('supports multiple negative assertions', async () => {
     await execCommand(`node ${pathToApp} message OK-and-fine`, {
-      notExpectedOutput: ['error', 'warning']
+      notExpectedOutput: ['error', 'warning'],
     })
   })
 })
