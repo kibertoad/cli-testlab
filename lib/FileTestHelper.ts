@@ -18,6 +18,10 @@ export class FileTestHelper {
     return fs.existsSync(targetPath)
   }
 
+  public dirExists(dirPath: string): boolean {
+    return this.fileExists(dirPath)
+  }
+
   public fileGlobExists(fileGlobPath: string): number {
     return globule.find(fileGlobPath).length
   }
@@ -48,6 +52,21 @@ export class FileTestHelper {
     }
   }
 
+  public deleteDir(
+    dirPath: string,
+    {
+      isPathAbsolute = false,
+    }: {
+      isPathAbsolute?: boolean
+    } = {}
+  ): void {
+    const targetPath = isPathAbsolute ? dirPath : path.resolve(this.basePath, dirPath)
+
+    if (fs.existsSync(targetPath)) {
+      rimrafSync(targetPath)
+    }
+  }
+
   public deleteFileGlob(fileGlobPath: string): void {
     del.sync(fileGlobPath)
   }
@@ -72,6 +91,26 @@ export class FileTestHelper {
     const targetPath = isPathAbsolute ? filePath : path.resolve(this.basePath, filePath)
     mkDirByPathSync(path.dirname(targetPath))
     fs.writeFileSync(targetPath, fileContent)
+  }
+
+  /**
+   * Create directory and (optionally) register it for later cleanup
+   */
+  public createDir(
+    dirPath: string,
+    {
+      willBeCleanedUp = true,
+      isPathAbsolute = false,
+    }: {
+      willBeCleanedUp?: boolean
+      isPathAbsolute?: boolean
+    } = {}
+  ): void {
+    if (willBeCleanedUp) {
+      this.registerForCleanup(dirPath, { isPathAbsolute })
+    }
+    const targetPath = isPathAbsolute ? dirPath : path.resolve(this.basePath, dirPath)
+    mkDirByPathSync(targetPath)
   }
 
   /**

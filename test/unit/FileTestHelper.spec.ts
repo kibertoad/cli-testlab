@@ -87,6 +87,14 @@ describe('FileTestHelper', () => {
       helper.deleteFile('dummy.txt')
       expect(helper.fileExists('dummy.txt')).toEqual(false)
     })
+
+    it('can also delete directory', () => {
+      const helper = new FileTestHelper()
+      helper.createDir('dummyDir')
+      expect(helper.dirExists('dummyDir')).toEqual(true)
+      helper.deleteDir('dummyDir')
+      expect(helper.dirExists('dummyDir')).toEqual(false)
+    })
   })
 
   describe('deleteFileGlob', () => {
