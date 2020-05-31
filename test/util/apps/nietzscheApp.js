@@ -9,7 +9,7 @@ program
   .command('quote')
   .option('-z, --Zarathustra', 'Quote from " Thus Spoke Zarathustra"')
   .option('-f, --file [path]', 'Output to file')
-  .action(function(cmd) {
+  .action(function (cmd) {
     const Zarathustra = cmd.Zarathustra
     if (Zarathustra) {
       output(

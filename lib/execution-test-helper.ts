@@ -78,7 +78,7 @@ export function execCommand(
     description,
     expectedErrorMessage,
     expectedOutput,
-    notExpectedOutput
+    notExpectedOutput,
   }: {
     description?: string
     expectedErrorMessage?: string | string[]

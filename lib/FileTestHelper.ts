@@ -28,7 +28,7 @@ export class FileTestHelper {
   }
 
   public getFileGlobTextContent(fileGlobPath: string): string[] {
-    return globule.find(fileGlobPath).map(resolvedPath => {
+    return globule.find(fileGlobPath).map((resolvedPath) => {
       return fs.readFileSync(resolvedPath).toString()
     })
   }
@@ -36,7 +36,7 @@ export class FileTestHelper {
   public deleteFile(
     filePath: string,
     {
-      isPathAbsolute = false
+      isPathAbsolute = false,
     }: {
       isPathAbsolute?: boolean
     } = {}
@@ -60,7 +60,7 @@ export class FileTestHelper {
     fileContent: any,
     {
       willBeCleanedUp = true,
-      isPathAbsolute = false
+      isPathAbsolute = false,
     }: {
       willBeCleanedUp?: boolean
       isPathAbsolute?: boolean
@@ -80,7 +80,7 @@ export class FileTestHelper {
   public registerForCleanup(
     filePath: string,
     {
-      isPathAbsolute = false
+      isPathAbsolute = false,
     }: {
       isPathAbsolute?: boolean
     } = {}
@@ -100,10 +100,10 @@ export class FileTestHelper {
    * Delete all files that were created by this helper or explicitly added to cleanup list
    */
   public cleanup(): void {
-    this.filesToCleanup.forEach(filePath => {
+    this.filesToCleanup.forEach((filePath) => {
       rimrafSync(filePath)
     })
-    this.fileGlobsToCleanup.forEach(fileGlob => {
+    this.fileGlobsToCleanup.forEach((fileGlob) => {
       del.sync(fileGlob)
     })
   }
