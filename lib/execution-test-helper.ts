@@ -43,18 +43,29 @@ function assertErrorMessages(
 
 function assertOutput(
   stdout: string,
-  expectedOutput: string[] | string | undefined,
+  expectedOutput: string[] | string | NumberedTextOccurences | undefined,
   rejectFn: (error: AssertionError) => void
 ) {
-  const expectedOutputs = toStringArray(expectedOutput)
-
   const errors: string[] = []
-  if (expectedOutputs && expectedOutputs.length > 0) {
-    expectedOutputs.forEach((expectedEntry: string) => {
-      if (!stdout.includes(expectedEntry)) {
-        errors.push(`Expected output to include "${expectedEntry}", but it was actually "${stdout}"`)
-      }
-    })
+
+  if (isNumberedTextOccurence(expectedOutput)) {
+    const actualTimes = occurrences(stdout, expectedOutput.expectedText, false)
+
+    if (actualTimes !== expectedOutput.exactlyTimes) {
+      errors.push(
+        `Expected output to include "${expectedOutput.expectedText}" exactly ${expectedOutput.exactlyTimes} times, but it was included ${actualTimes} times.`
+      )
+    }
+  } else {
+    const expectedOutputs = toStringArray(expectedOutput)
+
+    if (expectedOutputs && expectedOutputs.length > 0) {
+      expectedOutputs.forEach((expectedEntry: string) => {
+        if (!stdout.includes(expectedEntry)) {
+          errors.push(`Expected output to include "${expectedEntry}", but it was actually "${stdout}"`)
+        }
+      })
+    }
   }
   if (errors.length > 0) {
     rejectFn(new AssertionError(errors.join('\n')))
@@ -81,32 +92,33 @@ function assertNotOutput(
   }
 }
 
+export type CommandParams = {
+  description?: string
+  expectedErrorMessage?: string | string[]
+  expectedOutput?: string | string[] | NumberedTextOccurences
+  notExpectedOutput?: string | string[]
+}
+
+export type NumberedTextOccurences = {
+  expectedText: string
+  exactlyTimes: number
+}
+
+export type OutputAssertion = string | string[]
+
 /**
  * Execute given commandline command
  */
-export function execCommand(
-  cliCommand: string,
-  {
-    description,
-    expectedErrorMessage,
-    expectedOutput,
-    notExpectedOutput,
-  }: {
-    description?: string
-    expectedErrorMessage?: string | string[]
-    expectedOutput?: string | string[]
-    notExpectedOutput?: string | string[]
-  } = {}
-): Promise<ExecResult> {
-  description = description || cliCommand
+export function execCommand(cliCommand: string, params: CommandParams = {}): Promise<ExecResult> {
+  const description = params.description || cliCommand
   return new Promise((resolve, reject) => {
     let stderr = ''
     let stdout = ''
     const bin = jake.createExec([cliCommand])
     bin.addListener('error', (msg: string, _code: any) => {
       // Error is expected
-      if (expectedErrorMessage) {
-        assertErrorMessages(msg, expectedErrorMessage, reject)
+      if (params.expectedErrorMessage) {
+        assertErrorMessages(msg, params.expectedErrorMessage, reject)
         return resolve({ stdout, stderr })
       }
 
@@ -114,17 +126,17 @@ export function execCommand(
       return reject(Error(`${description} -> FAIL. ${EOL}Stdout: ${stdout} ${EOL}Error: ${stderr}`))
     })
     bin.addListener('cmdEnd', (_cmd: string) => {
-      if (expectedErrorMessage) {
+      if (params.expectedErrorMessage) {
         throw new AssertionError('Error was expected, but none thrown')
       }
 
-      if (expectedOutput) {
-        assertOutput(stdout, expectedOutput, reject)
+      if (params.expectedOutput) {
+        assertOutput(stdout, params.expectedOutput, reject)
         return resolve({ stdout, stderr })
       }
 
-      if (notExpectedOutput) {
-        assertNotOutput(stdout, notExpectedOutput, reject)
+      if (params.notExpectedOutput) {
+        assertNotOutput(stdout, params.notExpectedOutput, reject)
         return resolve({ stdout, stderr })
       }
 
@@ -135,4 +147,37 @@ export function execCommand(
     bin.addListener('stderr', (data: any) => (stderr += data.toString()))
     bin.run()
   })
+}
+
+function isNumberedTextOccurence(entity: any): entity is NumberedTextOccurences {
+  return entity && (entity as NumberedTextOccurences).exactlyTimes !== undefined
+}
+
+/** Function that count occurrences of a substring in a string;
+ * @param {String} string               The string
+ * @param {String} subString            The sub string to search for
+ * @param {Boolean} [allowOverlapping]  Optional. (Default:false)
+ *
+ * @author Vitim.us https://gist.github.com/victornpb/7736865
+ * @see Unit Test https://jsfiddle.net/Victornpb/5axuh96u/
+ * @see http://stackoverflow.com/questions/4009756/how-to-count-string-occurrence-in-string/7924240#7924240
+ */
+function occurrences(string: string, subString: string, allowOverlapping: boolean) {
+  string += ''
+  subString += ''
+  if (subString.length <= 0) return string.length + 1
+
+  let n = 0
+  let pos = 0
+  const step = allowOverlapping ? 1 : subString.length
+
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    pos = string.indexOf(subString, pos)
+    if (pos >= 0) {
+      ++n
+      pos += step
+    } else break
+  }
+  return n
 }

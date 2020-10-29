@@ -28,6 +28,24 @@ describe('execution-test-helper', () => {
     })
   })
 
+  it('supports exact amount of occurrences', async () => {
+    await execCommand(`node ${pathToApp} message ok-ok-ok-and-fine`, {
+      expectedOutput: { expectedText: 'ok', exactlyTimes: 3 },
+    })
+  })
+
+  it('throws an error if there is not an exact amount of occurrences', async () => {
+    try {
+      await execCommand(`node ${pathToApp} message ok-ok-ok-and-fine`, {
+        expectedOutput: { expectedText: 'ok', exactlyTimes: 2 },
+      })
+    } catch (err) {
+      expect(
+        err.message.startsWith('Expected output to include "ok" exactly 2 times, but it was included 3 times.')
+      ).toBeTruthy()
+    }
+  })
+
   it('throws an error if not expected text exists', async () => {
     expect.assertions(1)
 
