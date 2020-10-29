@@ -16,10 +16,67 @@ describe('execution-test-helper', () => {
     })
   })
 
+  it('can assert both error and a message and fail', async () => {
+    expect.assertions(1)
+    try {
+      await execCommand(`node ${pathToApp} error Crash-and-burn`, {
+        expectedErrorMessage: ['Crash', 'burn'],
+        expectedOutput: 'OK',
+      })
+    } catch (err) {
+      expect(err.message.startsWith('Expected output to include "OK"')).toBeTruthy()
+    }
+  })
+
+  it('can assert both error and a numbered occurrence message and fail', async () => {
+    expect.assertions(1)
+    try {
+      await execCommand(`node ${pathToApp} error Crash-and-burn`, {
+        expectedErrorMessage: ['Crash', 'burn'],
+        expectedOutput: { exactlyTimes: 1, expectedText: 'OK' },
+      })
+    } catch (err) {
+      expect(err.message.startsWith('Expected output to include "OK"')).toBeTruthy()
+    }
+  })
+
+  it('can assert both error and a message and succeed', async () => {
+    await execCommand(`node ${pathToApp} error Crash-and-burn`, {
+      expectedErrorMessage: ['Crash', 'burn'],
+      expectedOutput: 'Will throw an error shortly.',
+    })
+  })
+
+  it('can assert both error and a numbered occurrence message and succeed', async () => {
+    await execCommand(`node ${pathToApp} error Crash-and-burn`, {
+      expectedErrorMessage: ['Crash', 'burn'],
+      expectedOutput: { exactlyTimes: 1, expectedText: 'Will throw an error shortly.' },
+    })
+  })
+
   it('executes without an error', async () => {
     await execCommand(`node ${pathToApp} message OK`, {
       expectedOutput: 'OK',
     })
+  })
+
+  it('can combine positive and negative assertion', async () => {
+    await execCommand(`node ${pathToApp} message OK`, {
+      expectedOutput: 'OK',
+      notExpectedOutput: 'Mecha',
+    })
+  })
+
+  it('can combine positive and negative assertion and fail', async () => {
+    expect.assertions(1)
+    try {
+      await execCommand(`node ${pathToApp} message OK`, {
+        expectedOutput: 'OK',
+        notExpectedOutput: 'OK',
+      })
+    } catch (err) {
+      expect(err.message.startsWith('Expected output not to include "OK", but it was actually "OK')).toBeTruthy()
+    }
   })
 
   it('supports multiple assertions', async () => {
@@ -35,6 +92,7 @@ describe('execution-test-helper', () => {
   })
 
   it('throws an error if there is not an exact amount of occurrences', async () => {
+    expect.assertions(1)
     try {
       await execCommand(`node ${pathToApp} message ok-ok-ok-and-fine`, {
         expectedOutput: { expectedText: 'ok', exactlyTimes: 2 },
