@@ -6,6 +6,7 @@ program
   .command('error <message>')
   .description('Throw given error')
   .action((message) => {
+    console.log('Will throw an error shortly.')
     throw new Error(message)
   })
 

@@ -119,11 +119,21 @@ export function execCommand(cliCommand: string, params: CommandParams = {}): Pro
       // Error is expected
       if (params.expectedErrorMessage) {
         assertErrorMessages(msg, params.expectedErrorMessage, reject)
-        return resolve({ stdout, stderr })
       }
 
-      // Error is not expected
-      return reject(Error(`${description} -> FAIL. ${EOL}Stdout: ${stdout} ${EOL}Error: ${stderr}`))
+      if (params.expectedOutput) {
+        assertOutput(stdout, params.expectedOutput, reject)
+      }
+
+      if (params.notExpectedOutput) {
+        assertNotOutput(stdout, params.notExpectedOutput, reject)
+      }
+
+      if (!params.expectedErrorMessage) {
+        // Error is not expected
+        return reject(Error(`${description} -> FAIL. ${EOL}Stdout: ${stdout} ${EOL}Error: ${stderr}`))
+      }
+      return resolve({ stdout, stderr })
     })
     bin.addListener('cmdEnd', (_cmd: string) => {
       if (params.expectedErrorMessage) {
@@ -132,12 +142,10 @@ export function execCommand(cliCommand: string, params: CommandParams = {}): Pro
 
       if (params.expectedOutput) {
         assertOutput(stdout, params.expectedOutput, reject)
-        return resolve({ stdout, stderr })
       }
 
       if (params.notExpectedOutput) {
         assertNotOutput(stdout, params.notExpectedOutput, reject)
-        return resolve({ stdout, stderr })
       }
 
       return resolve({ stdout, stderr })
