@@ -93,6 +93,7 @@ function assertNotOutput(
 }
 
 export type CommandParams = {
+  baseDir?: string
   description?: string
   expectedErrorMessage?: string | string[]
   expectedOutput?: string | string[] | NumberedTextOccurences
@@ -110,6 +111,10 @@ export type OutputAssertion = string | string[]
  * Execute given commandline command
  */
 export function execCommand(cliCommand: string, params: CommandParams = {}): Promise<ExecResult> {
+  if (params.baseDir) {
+    process.chdir(params.baseDir)
+  }
+
   const description = params.description || cliCommand
   return new Promise((resolve, reject) => {
     let stderr = ''
