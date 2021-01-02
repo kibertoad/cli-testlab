@@ -1,6 +1,7 @@
 {
   "name": "cli-testlab",
   "version": "2.2.0",
+  "description": "Test framework for CLI utilities",
   "author": {
     "name": "Igor Savin",
     "web": "https://github.com/kibertoad"

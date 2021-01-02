@@ -1,4 +1,7 @@
 # cli-testlab
+
+[![NPM Version][npm-image]][npm-url]
+
 Node.js test framework for CLI utilities
 
 
@@ -71,3 +74,6 @@ describe('Application under test', () => {
       expect(fileCount).to.equal(1);
     });
 ```
+
+[npm-image]: https://img.shields.io/npm/v/cli-testlab.svg
+[npm-url]: https://npmjs.org/package/cli-testlab
