@@ -4,6 +4,13 @@ const { execCommand } = require('../../../lib/execution-test-helper')
 const pathToApp = path.normalize(__dirname + '/../../util/apps/basic.cli.app.js')
 
 describe('execution-test-helper', () => {
+  it('supports baseDir param', async () => {
+    await execCommand(`ts-node ${pathToApp} message OK`, {
+      baseDir: 'node_modules/.bin/',
+      expectedOutput: 'OK',
+    })
+  })
+
   it('executes with an error', async () => {
     await execCommand(`node ${pathToApp} error Kaboom`, {
       expectedErrorMessage: 'Kaboom',
