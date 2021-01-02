@@ -2,7 +2,6 @@ import path from 'path'
 
 const { execCommand } = require('../../../lib/execution-test-helper')
 const pathToApp = path.normalize(__dirname + '/../../util/apps/basic.cli.app.js')
-// ${__dirname + '/../../'}util/apps/basic.cli.app.js message OK
 
 describe('execution-test-helper', () => {
   it('supports baseDir param', async () => {
