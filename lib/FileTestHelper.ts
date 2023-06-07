@@ -157,7 +157,7 @@ function mkDirByPathSync(targetDir: string, { isRelativeToScript = false } = {})
     const curDir = path.resolve(baseDir, parentDir, childDir)
     try {
       fs.mkdirSync(curDir)
-    } catch (err) {
+    } catch (err: any) {
       if (err.code === 'EEXIST') {
         // curDir already exists!
         return curDir
