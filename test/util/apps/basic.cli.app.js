@@ -15,7 +15,6 @@ program
   .description('Print given message')
   .action((message) => {
     console.log(message)
-    process.exit(0)
   })
 
 program.parse(process.argv)
