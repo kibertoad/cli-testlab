@@ -1,13 +1,6 @@
 import { AssertionError } from './AssertionError'
 import { EOL } from 'os'
-
-require('jake')
-
-declare global {
-  const jake: any
-  const task: any
-  const desc: any
-}
+import child_process from 'child_process'
 
 declare interface ExecResult {
   stdout: string
@@ -119,46 +112,56 @@ export function execCommand(cliCommand: string, params: CommandParams = {}): Pro
   return new Promise((resolve, reject) => {
     let stderr = ''
     let stdout = ''
-    const bin = jake.createExec([cliCommand])
-    bin.addListener('error', (msg: string, _code: any) => {
-      // Error is expected
-      if (params.expectedErrorMessage) {
-        assertErrorMessages(msg, params.expectedErrorMessage, reject)
+    const bin = child_process.exec(cliCommand)
+
+    bin.on('close', (exitCode: number) => {
+      const isError = exitCode !== 0
+
+      if (!isError) {
+        if (params.expectedErrorMessage) {
+          throw new AssertionError('Error was expected, but none thrown')
+        }
+
+        if (params.expectedOutput) {
+          assertOutput(stdout, params.expectedOutput, reject)
+        }
+
+        if (params.notExpectedOutput) {
+          assertNotOutput(stdout, params.notExpectedOutput, reject)
+        }
+
+        return resolve({ stdout, stderr })
       }
 
-      if (params.expectedOutput) {
-        assertOutput(stdout, params.expectedOutput, reject)
-      }
+      // isError
+      else {
+        if (params.expectedErrorMessage) {
+          assertErrorMessages(stderr, params.expectedErrorMessage, reject)
+        }
 
-      if (params.notExpectedOutput) {
-        assertNotOutput(stdout, params.notExpectedOutput, reject)
-      }
+        if (params.expectedOutput) {
+          assertOutput(stdout, params.expectedOutput, reject)
+        }
 
-      if (!params.expectedErrorMessage) {
-        // Error is not expected
-        return reject(Error(`${description} -> FAIL. ${EOL}Stdout: ${stdout} ${EOL}Error: ${stderr}`))
+        if (params.notExpectedOutput) {
+          assertNotOutput(stdout, params.notExpectedOutput, reject)
+        }
+
+        if (!params.expectedErrorMessage) {
+          // Error is not expected
+          return reject(Error(`${description} -> FAIL. ${EOL}Stdout: ${stdout} ${EOL}Error: ${stderr}`))
+        }
+        return resolve({ stdout, stderr })
       }
-      return resolve({ stdout, stderr })
     })
-    bin.addListener('cmdEnd', (_cmd: string) => {
-      if (params.expectedErrorMessage) {
-        throw new AssertionError('Error was expected, but none thrown')
-      }
 
-      if (params.expectedOutput) {
-        assertOutput(stdout, params.expectedOutput, reject)
-      }
-
-      if (params.notExpectedOutput) {
-        assertNotOutput(stdout, params.notExpectedOutput, reject)
-      }
-
-      return resolve({ stdout, stderr })
+    bin.stdout!.on('data', (data: any) => {
+      stdout += data.toString()
     })
 
-    bin.addListener('stdout', (data: any) => (stdout += data.toString()))
-    bin.addListener('stderr', (data: any) => (stderr += data.toString()))
-    bin.run()
+    bin.stderr!.on('data', (data: any) => {
+      stderr += data.toString()
+    })
   })
 }
 
