@@ -17,7 +17,7 @@ function toStringArray(value?: string | string[]): string[] | undefined {
 function assertErrorMessages(
   msg: string,
   expectedErrorMessage: string[] | string | undefined,
-  rejectFn: (error: AssertionError) => void
+  rejectFn: (error: AssertionError) => void,
 ) {
   const expectedErrorMessages = toStringArray(expectedErrorMessage)
 
@@ -37,7 +37,7 @@ function assertErrorMessages(
 function assertOutput(
   stdout: string,
   expectedOutput: string[] | string | NumberedTextOccurences | undefined,
-  rejectFn: (error: AssertionError) => void
+  rejectFn: (error: AssertionError) => void,
 ) {
   const errors: string[] = []
 
@@ -46,7 +46,7 @@ function assertOutput(
 
     if (actualTimes !== expectedOutput.exactlyTimes) {
       errors.push(
-        `Expected output to include "${expectedOutput.expectedText}" exactly ${expectedOutput.exactlyTimes} times, but it was included ${actualTimes} times.`
+        `Expected output to include "${expectedOutput.expectedText}" exactly ${expectedOutput.exactlyTimes} times, but it was included ${actualTimes} times.`,
       )
     }
   } else {
@@ -68,7 +68,7 @@ function assertOutput(
 function assertNotOutput(
   stdout: string,
   notExpectedOutput: string[] | string | undefined,
-  rejectFn: (error: AssertionError) => void
+  rejectFn: (error: AssertionError) => void,
 ) {
   const notExpectedOutputs = toStringArray(notExpectedOutput)
 

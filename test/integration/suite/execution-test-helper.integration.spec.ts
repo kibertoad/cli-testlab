@@ -106,7 +106,7 @@ describe('execution-test-helper', () => {
       })
     } catch (err: any) {
       expect(
-        err.message.startsWith('Expected output to include "ok" exactly 2 times, but it was included 3 times.')
+        err.message.startsWith('Expected output to include "ok" exactly 2 times, but it was included 3 times.'),
       ).toBeTruthy()
     }
   })

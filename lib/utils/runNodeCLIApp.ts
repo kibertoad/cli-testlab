@@ -11,7 +11,7 @@ import path from 'path'
 export function runNodeCLIApp(
   pathToApp: string,
   args: any[] = [],
-  { resetArgv = false }: { resetArgv?: boolean } = {}
+  { resetArgv = false }: { resetArgv?: boolean } = {},
 ) {
   if (resetArgv) {
     process.argv = process.argv.slice(0, 2)
