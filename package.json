@@ -1,6 +1,6 @@
 {
   "name": "cli-testlab",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Test framework for CLI utilities",
   "author": {
     "name": "Igor Savin",
@@ -22,7 +22,7 @@
     "url": "git://github.com/kibertoad/cli-testlab.git"
   },
   "engines": {
-    "node": ">=14.14.0"
+    "node": ">=16"
   },
   "dependencies": {
     "del": "^5.1.0",
