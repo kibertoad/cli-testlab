@@ -1,4 +1,3 @@
-import { execCommand } from './lib/execution-test-helper'
-import { FileTestHelper } from './lib/FileTestHelper'
-
-export { FileTestHelper, execCommand }
+export { execCommand } from './lib/execution-test-helper'
+export { FileTestHelper } from './lib/FileTestHelper'
+export type { FileTestHelperConfig } from './lib/FileTestHelper'
