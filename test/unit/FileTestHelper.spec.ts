@@ -40,11 +40,12 @@ describe('FileTestHelper', () => {
     })
 
     it('works with base path', () => {
-      const helper = new FileTestHelper('pandas')
+      const helper = new FileTestHelper({ basePath: 'pandas' })
       helper.createFile('bears123.txt', 'test')
       const content = helper.getFileGlobTextContent('pandas/bears*.txt')
       expect(content.length).toEqual(1)
       expect(content[0]).toEqual('test')
+      helper.registerForCleanup('../pandas')
       helper.cleanup()
     })
   })
@@ -145,6 +146,7 @@ describe('FileTestHelper', () => {
       const helper2 = new FileTestHelper()
       helper2.registerGlobForCleanup('tempdir/dummy*.txt')
       expect(helper2.fileExists('tempdir/dummy123.txt')).toEqual(true)
+      helper2.registerForCleanup('tempdir')
       helper2.cleanup()
       expect(helper2.fileExists('tempdir/dummy123.txt')).toEqual(false)
     })

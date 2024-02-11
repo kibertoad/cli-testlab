@@ -1,16 +1,25 @@
-import * as del from 'del'
-import { sync as rimrafSync } from 'rimraf'
 import path from 'path'
 import fs from 'fs'
 import * as globule from 'globule'
+import del from 'del'
+
+export type FileTestHelperConfig = {
+  basePath?: string
+  maxRetries?: number
+  retryDelay?: number
+}
 
 export class FileTestHelper {
-  private basePath: string
-  private filesToCleanup: string[] = []
-  private fileGlobsToCleanup: string[] = []
+  private readonly basePath: string
+  private readonly filesToCleanup: string[] = []
+  private readonly fileGlobsToCleanup: string[] = []
+  private readonly maxRetries?: number
+  private readonly retryDelay?: number
 
-  public constructor(basePath = './') {
-    this.basePath = basePath
+  public constructor(config: FileTestHelperConfig = {}) {
+    this.basePath = config.basePath || './'
+    this.maxRetries = config.maxRetries || 10
+    this.retryDelay = config.retryDelay || 5
   }
 
   public fileExists(filePath: string): boolean {
@@ -41,14 +50,18 @@ export class FileTestHelper {
     filePath: string,
     {
       isPathAbsolute = false,
+      maxRetries = this.maxRetries,
+      retryDelay = this.retryDelay,
     }: {
       isPathAbsolute?: boolean
-    } = {}
+      maxRetries?: number
+      retryDelay?: number
+    } = {},
   ): void {
     const targetPath = isPathAbsolute ? filePath : path.resolve(this.basePath, filePath)
 
     if (fs.existsSync(targetPath)) {
-      fs.unlinkSync(targetPath)
+      fs.rmSync(targetPath, { force: true, recursive: true, maxRetries, retryDelay })
     }
   }
 
@@ -56,14 +69,18 @@ export class FileTestHelper {
     dirPath: string,
     {
       isPathAbsolute = false,
+      maxRetries = this.maxRetries,
+      retryDelay = this.retryDelay,
     }: {
       isPathAbsolute?: boolean
-    } = {}
+      maxRetries?: number
+      retryDelay?: number
+    } = {},
   ): void {
     const targetPath = isPathAbsolute ? dirPath : path.resolve(this.basePath, dirPath)
 
     if (fs.existsSync(targetPath)) {
-      rimrafSync(targetPath)
+      fs.rmSync(targetPath, { force: true, recursive: true, maxRetries, retryDelay })
     }
   }
 
@@ -83,7 +100,7 @@ export class FileTestHelper {
     }: {
       willBeCleanedUp?: boolean
       isPathAbsolute?: boolean
-    } = {}
+    } = {},
   ): void {
     if (willBeCleanedUp) {
       this.registerForCleanup(filePath, { isPathAbsolute })
@@ -104,7 +121,7 @@ export class FileTestHelper {
     }: {
       willBeCleanedUp?: boolean
       isPathAbsolute?: boolean
-    } = {}
+    } = {},
   ): void {
     if (willBeCleanedUp) {
       this.registerForCleanup(dirPath, { isPathAbsolute })
@@ -122,7 +139,7 @@ export class FileTestHelper {
       isPathAbsolute = false,
     }: {
       isPathAbsolute?: boolean
-    } = {}
+    } = {},
   ): void {
     const targetPath = isPathAbsolute ? filePath : path.resolve(this.basePath, filePath)
     this.filesToCleanup.push(targetPath)
@@ -140,7 +157,10 @@ export class FileTestHelper {
    */
   public cleanup(): void {
     this.filesToCleanup.forEach((filePath) => {
-      rimrafSync(filePath)
+      this.deleteFile(filePath, {
+        maxRetries: this.maxRetries,
+        retryDelay: this.retryDelay,
+      })
     })
     this.fileGlobsToCleanup.forEach((fileGlob) => {
       del.sync(fileGlob)

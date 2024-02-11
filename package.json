@@ -14,7 +14,7 @@
     "test": "jest --config=jest.config.json --runInBand",
     "test:coverage": "jest --config=jest.config.json --coverage --runInBand",
     "test:ci": "npm run lint && npm run test:coverage",
-    "lint": "eslint --format codeframe \"lib/**/*.ts\" \"test/**/*.ts\" \"test/**/*.js\" index.ts",
+    "lint": "eslint \"lib/**/*.ts\" \"test/**/*.ts\" \"test/**/*.js\" index.ts",
     "prettier": "prettier --write \"{lib,test}/**/*.{js,ts}\" index.ts"
   },
   "repository": {
@@ -22,32 +22,27 @@
     "url": "git://github.com/kibertoad/cli-testlab.git"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=14.14.0"
   },
   "dependencies": {
     "del": "^5.1.0",
-    "globule": "^1.3.2",
-    "rimraf": "^5.0.1",
-    "tslib": "^2.5.3"
+    "globule": "^1.3.4"
   },
   "devDependencies": {
     "@types/globule": "^1.1.3",
     "@types/jest": "^29.5.2",
     "@types/node": "^14.18.48",
-    "@types/rimraf": "^4.0.5",
-    "@typescript-eslint/eslint-plugin": "^5.59.9",
-    "@typescript-eslint/parser": "^5.59.9",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "commander": "^10.0.1",
     "copyfiles": "^2.4.1",
     "del-cli": "^5.0.0",
-    "eslint": "^7.17.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-prettier": "^4.2.1",
+    "eslint": "^8.56.0",
     "jest": "^29.5.0",
-    "prettier": "^2.2.1",
+    "prettier": "^3.2.5",
     "ts-jest": "^29.1.0",
     "ts-node": "^10.9.1",
-    "typescript": "5.1.3"
+    "typescript": "5.3.3"
   },
   "files": [
     "README.md",
