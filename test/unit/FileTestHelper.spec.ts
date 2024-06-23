@@ -1,5 +1,6 @@
 import { FileTestHelper } from '../../lib/FileTestHelper'
-import fs from 'fs'
+import { describe, it, expect } from 'vitest'
+import fs from 'node:fs'
 
 describe('FileTestHelper', () => {
   describe('createFile', () => {
@@ -92,6 +93,15 @@ describe('FileTestHelper', () => {
     it('can also delete directory', () => {
       const helper = new FileTestHelper()
       helper.createDir('dummyDir')
+      expect(helper.dirExists('dummyDir')).toEqual(true)
+      helper.deleteDir('dummyDir')
+      expect(helper.dirExists('dummyDir')).toEqual(false)
+    })
+
+    it('can also delete non-empty directory', () => {
+      const helper = new FileTestHelper()
+      helper.createDir('dummyDir')
+      helper.createFile('dummyDir/file.txt', 'txt')
       expect(helper.dirExists('dummyDir')).toEqual(true)
       helper.deleteDir('dummyDir')
       expect(helper.dirExists('dummyDir')).toEqual(false)
