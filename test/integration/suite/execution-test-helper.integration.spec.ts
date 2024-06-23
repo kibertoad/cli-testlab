@@ -1,11 +1,12 @@
 import path from 'path'
 
 import { execCommand } from '../../../lib/execution-test-helper'
+import { describe, it, expect } from 'vitest'
 const pathToApp = path.normalize(__dirname + '/../../util/apps/basic.cli.app.js')
 
 describe('execution-test-helper', () => {
   it('supports baseDir param', async () => {
-    await execCommand(`ts-node ${pathToApp} message OK`, {
+    await execCommand(`node ${pathToApp} message OK`, {
       baseDir: 'node_modules/.bin/',
       expectedOutput: 'OK',
     })
