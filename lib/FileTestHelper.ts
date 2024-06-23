@@ -1,7 +1,7 @@
-import path from 'path'
-import fs from 'fs'
+import path from 'node:path'
+import fs from 'node:fs'
 import * as globule from 'globule'
-import del from 'del'
+import { sync as deleteSync } from 'rimraf'
 
 export type FileTestHelperConfig = {
   basePath?: string
@@ -85,7 +85,7 @@ export class FileTestHelper {
   }
 
   public deleteFileGlob(fileGlobPath: string): void {
-    del.sync(fileGlobPath)
+    deleteSync(fileGlobPath, { glob: true })
   }
 
   /**
@@ -163,7 +163,7 @@ export class FileTestHelper {
       })
     })
     this.fileGlobsToCleanup.forEach((fileGlob) => {
-      del.sync(fileGlob)
+      deleteSync(fileGlob, { glob: true })
     })
   }
 }
