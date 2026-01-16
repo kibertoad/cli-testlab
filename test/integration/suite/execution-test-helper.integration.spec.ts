@@ -135,4 +135,26 @@ describe('execution-test-helper', () => {
       notExpectedOutput: ['error', 'warning'],
     })
   })
+
+  it('supports env param', async () => {
+    await execCommand(`node ${pathToApp} env TEST_VAR`, {
+      env: { TEST_VAR: 'hello-from-env' },
+      expectedOutput: 'hello-from-env',
+    })
+  })
+
+  it('supports env param with multiple variables', async () => {
+    await execCommand(`node ${pathToApp} env CUSTOM_VALUE`, {
+      env: { CUSTOM_VALUE: 'test123', OTHER_VAR: 'ignored' },
+      expectedOutput: 'test123',
+    })
+  })
+
+  it('merges env with process.env', async () => {
+    // PATH should still be available from process.env
+    const result = await execCommand(`node ${pathToApp} env PATH`, {
+      env: { EXTRA_VAR: 'extra' },
+    })
+    expect(result.stdout.length).toBeGreaterThan(0)
+  })
 })
