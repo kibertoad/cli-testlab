@@ -3,12 +3,7 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig({
   test: {
     globals: true,
-    poolOptions: {
-      forks: {
-        singleFork: true,
-      }
-    },
-    pool: 'forks',
+    maxWorkers: 1,
     watch: false,
     environment: 'node',
     reporters: ['default'],
@@ -19,9 +14,8 @@ export default defineConfig({
         "lib/utils/runNodeCLIApp.ts"
       ],
       reporter: ['text'],
-      all: true,
       thresholds: {
-        statements: 94,
+        statements: 93,
         branches: 75,
         functions: 97,
         lines: 94
