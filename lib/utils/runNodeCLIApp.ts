@@ -1,4 +1,4 @@
-import path from 'path'
+import path from 'node:path'
 
 /**
  * Load and execute given JS script file. Uses Node.js require instead of native CLI execution. This allows to use debugger on

@@ -1,6 +1,6 @@
 import { AssertionError } from './AssertionError'
-import { EOL } from 'os'
-import child_process from 'child_process'
+import { EOL } from 'node:os'
+import child_process from 'node:child_process'
 
 declare interface ExecResult {
   stdout: string
