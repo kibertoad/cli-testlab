@@ -17,4 +17,11 @@ program
     console.log(message)
   })
 
+program
+  .command('env <varName>')
+  .description('Print given environment variable')
+  .action((varName) => {
+    console.log(process.env[varName] || '')
+  })
+
 program.parse(process.argv)

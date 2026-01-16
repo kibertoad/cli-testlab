@@ -88,6 +88,7 @@ function assertNotOutput(
 export type CommandParams = {
   baseDir?: string
   description?: string
+  env?: NodeJS.ProcessEnv
   expectedErrorMessage?: string | string[]
   expectedOutput?: string | string[] | NumberedTextOccurences
   notExpectedOutput?: string | string[]
@@ -109,10 +110,12 @@ export function execCommand(cliCommand: string, params: CommandParams = {}): Pro
   }
 
   const description = params.description || cliCommand
+  const execOptions = params.env ? { env: { ...process.env, ...params.env } } : undefined
+
   return new Promise((resolve, reject) => {
     let stderr = ''
     let stdout = ''
-    const bin = child_process.exec(cliCommand)
+    const bin = child_process.exec(cliCommand, execOptions)
 
     bin.on('close', (exitCode: number) => {
       const isError = exitCode !== 0
