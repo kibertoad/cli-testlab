@@ -6,7 +6,7 @@
     "sourceMap": true,
     "declaration": true,
     "declarationMap": false,
-    "types": ["node", "jest"],
+    "types": ["node", "vitest/globals"],
     "strict": true,
     "moduleResolution": "node",
     "noUnusedLocals": true,
