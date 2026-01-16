@@ -1,6 +1,6 @@
 {
   "name": "cli-testlab",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "Test framework for CLI utilities",
   "author": {
     "name": "Igor Savin",
