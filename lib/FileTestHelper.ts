@@ -1,6 +1,6 @@
 import path from 'node:path'
 import fs from 'node:fs'
-import * as globule from 'globule'
+import { globSync } from 'glob'
 import { sync as deleteSync } from 'rimraf'
 
 export type FileTestHelperConfig = {
@@ -32,7 +32,7 @@ export class FileTestHelper {
   }
 
   public fileGlobExists(fileGlobPath: string): number {
-    return globule.find(fileGlobPath).length
+    return globSync(fileGlobPath).length
   }
 
   public getFileTextContent(filePath: string): string {
@@ -41,7 +41,7 @@ export class FileTestHelper {
   }
 
   public getFileGlobTextContent(fileGlobPath: string): string[] {
-    return globule.find(fileGlobPath).map((resolvedPath) => {
+    return globSync(fileGlobPath).map((resolvedPath) => {
       return fs.readFileSync(resolvedPath).toString()
     })
   }
