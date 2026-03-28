@@ -1,160 +1,166 @@
-import path from 'path'
+import path from "path";
 
-import { execCommand } from '../../../lib/execution-test-helper'
-import { describe, it, expect } from 'vitest'
-const pathToApp = path.normalize(__dirname + '/../../util/apps/basic.cli.app.js')
+import { execCommand } from "../../../lib/execution-test-helper";
+import { describe, it, expect } from "vitest";
+const pathToApp = path.normalize(__dirname + "/../../util/apps/basic.cli.app.js");
 
-describe('execution-test-helper', () => {
-  it('supports baseDir param', async () => {
+describe("execution-test-helper", () => {
+  it("supports baseDir param", async () => {
     await execCommand(`node ${pathToApp} message OK`, {
-      baseDir: 'node_modules/.bin/',
-      expectedOutput: 'OK',
-    })
-  })
+      baseDir: "node_modules/.bin/",
+      expectedOutput: "OK",
+    });
+  });
 
-  it('executes with an error', async () => {
+  it("executes with an error", async () => {
     await execCommand(`node ${pathToApp} error Kaboom`, {
-      expectedErrorMessage: 'Kaboom',
-    })
-  })
+      expectedErrorMessage: "Kaboom",
+    });
+  });
 
-  it('supports multiple error assertions', async () => {
+  it("supports multiple error assertions", async () => {
     await execCommand(`node ${pathToApp} error Crash-and-burn`, {
-      expectedErrorMessage: ['Crash', 'burn'],
-    })
-  })
+      expectedErrorMessage: ["Crash", "burn"],
+    });
+  });
 
-  it('can assert both error and a message and fail', async () => {
-    expect.assertions(1)
+  it("can assert both error and a message and fail", async () => {
+    expect.assertions(1);
     try {
       await execCommand(`node ${pathToApp} error Crash-and-burn`, {
-        expectedErrorMessage: ['Crash', 'burn'],
-        expectedOutput: 'OK',
-      })
+        expectedErrorMessage: ["Crash", "burn"],
+        expectedOutput: "OK",
+      });
     } catch (err: any) {
-      expect(err.message.startsWith('Expected output to include "OK"')).toBeTruthy()
+      expect(err.message.startsWith('Expected output to include "OK"')).toBeTruthy();
     }
-  })
+  });
 
-  it('can assert both error and a numbered occurrence message and fail', async () => {
-    expect.assertions(1)
+  it("can assert both error and a numbered occurrence message and fail", async () => {
+    expect.assertions(1);
     try {
       await execCommand(`node ${pathToApp} error Crash-and-burn`, {
-        expectedErrorMessage: ['Crash', 'burn'],
-        expectedOutput: { exactlyTimes: 1, expectedText: 'OK' },
-      })
+        expectedErrorMessage: ["Crash", "burn"],
+        expectedOutput: { exactlyTimes: 1, expectedText: "OK" },
+      });
     } catch (err: any) {
-      expect(err.message.startsWith('Expected output to include "OK"')).toBeTruthy()
+      expect(err.message.startsWith('Expected output to include "OK"')).toBeTruthy();
     }
-  })
+  });
 
-  it('can assert both error and a message and succeed', async () => {
+  it("can assert both error and a message and succeed", async () => {
     await execCommand(`node ${pathToApp} error Crash-and-burn`, {
-      expectedErrorMessage: ['Crash', 'burn'],
-      expectedOutput: 'Will throw an error shortly.',
-    })
-  })
+      expectedErrorMessage: ["Crash", "burn"],
+      expectedOutput: "Will throw an error shortly.",
+    });
+  });
 
-  it('can assert both error and a numbered occurrence message and succeed', async () => {
+  it("can assert both error and a numbered occurrence message and succeed", async () => {
     await execCommand(`node ${pathToApp} error Crash-and-burn`, {
-      expectedErrorMessage: ['Crash', 'burn'],
-      expectedOutput: { exactlyTimes: 1, expectedText: 'Will throw an error shortly.' },
-    })
-  })
+      expectedErrorMessage: ["Crash", "burn"],
+      expectedOutput: { exactlyTimes: 1, expectedText: "Will throw an error shortly." },
+    });
+  });
 
-  it('executes without an error', async () => {
+  it("executes without an error", async () => {
     await execCommand(`node ${pathToApp} message OK`, {
-      expectedOutput: 'OK',
-    })
-  })
+      expectedOutput: "OK",
+    });
+  });
 
-  it('can combine positive and negative assertion', async () => {
+  it("can combine positive and negative assertion", async () => {
     await execCommand(`node ${pathToApp} message OK`, {
-      expectedOutput: 'OK',
-      notExpectedOutput: 'Mecha',
-    })
-  })
+      expectedOutput: "OK",
+      notExpectedOutput: "Mecha",
+    });
+  });
 
-  it('can combine positive and negative assertion and fail', async () => {
-    expect.assertions(1)
+  it("can combine positive and negative assertion and fail", async () => {
+    expect.assertions(1);
     try {
       await execCommand(`node ${pathToApp} message OK`, {
-        expectedOutput: 'OK',
-        notExpectedOutput: 'OK',
-      })
-    } catch (err: any) {
-      expect(err.message.startsWith('Expected output not to include "OK", but it was actually "OK')).toBeTruthy()
-    }
-  })
-
-  it('supports multiple assertions', async () => {
-    await execCommand(`node ${pathToApp} message OK-and-fine`, {
-      expectedOutput: ['OK', 'fine'],
-    })
-  })
-
-  it('supports exact amount of occurrences', async () => {
-    await execCommand(`node ${pathToApp} message ok-ok-ok-and-fine`, {
-      expectedOutput: { expectedText: 'ok', exactlyTimes: 3 },
-    })
-  })
-
-  it('throws an error if there is not an exact amount of occurrences', async () => {
-    expect.assertions(1)
-    try {
-      await execCommand(`node ${pathToApp} message ok-ok-ok-and-fine`, {
-        expectedOutput: { expectedText: 'ok', exactlyTimes: 2 },
-      })
+        expectedOutput: "OK",
+        notExpectedOutput: "OK",
+      });
     } catch (err: any) {
       expect(
-        err.message.startsWith('Expected output to include "ok" exactly 2 times, but it was included 3 times.'),
-      ).toBeTruthy()
+        err.message.startsWith('Expected output not to include "OK", but it was actually "OK'),
+      ).toBeTruthy();
     }
-  })
+  });
 
-  it('throws an error if not expected text exists', async () => {
-    expect.assertions(1)
+  it("supports multiple assertions", async () => {
+    await execCommand(`node ${pathToApp} message OK-and-fine`, {
+      expectedOutput: ["OK", "fine"],
+    });
+  });
+
+  it("supports exact amount of occurrences", async () => {
+    await execCommand(`node ${pathToApp} message ok-ok-ok-and-fine`, {
+      expectedOutput: { expectedText: "ok", exactlyTimes: 3 },
+    });
+  });
+
+  it("throws an error if there is not an exact amount of occurrences", async () => {
+    expect.assertions(1);
+    try {
+      await execCommand(`node ${pathToApp} message ok-ok-ok-and-fine`, {
+        expectedOutput: { expectedText: "ok", exactlyTimes: 2 },
+      });
+    } catch (err: any) {
+      expect(
+        err.message.startsWith(
+          'Expected output to include "ok" exactly 2 times, but it was included 3 times.',
+        ),
+      ).toBeTruthy();
+    }
+  });
+
+  it("throws an error if not expected text exists", async () => {
+    expect.assertions(1);
 
     try {
       await execCommand(`node ${pathToApp} message OK`, {
-        notExpectedOutput: 'OK',
-      })
+        notExpectedOutput: "OK",
+      });
     } catch (err: any) {
-      expect(err.message.startsWith('Expected output not to include "OK", but it was actually "OK')).toBeTruthy()
+      expect(
+        err.message.startsWith('Expected output not to include "OK", but it was actually "OK'),
+      ).toBeTruthy();
     }
-  })
+  });
 
-  it('does not include unexpected text', async () => {
+  it("does not include unexpected text", async () => {
     await execCommand(`node ${pathToApp} message OK`, {
-      notExpectedOutput: 'error',
-    })
-  })
+      notExpectedOutput: "error",
+    });
+  });
 
-  it('supports multiple negative assertions', async () => {
+  it("supports multiple negative assertions", async () => {
     await execCommand(`node ${pathToApp} message OK-and-fine`, {
-      notExpectedOutput: ['error', 'warning'],
-    })
-  })
+      notExpectedOutput: ["error", "warning"],
+    });
+  });
 
-  it('supports env param', async () => {
+  it("supports env param", async () => {
     await execCommand(`node ${pathToApp} env TEST_VAR`, {
-      env: { TEST_VAR: 'hello-from-env' },
-      expectedOutput: 'hello-from-env',
-    })
-  })
+      env: { TEST_VAR: "hello-from-env" },
+      expectedOutput: "hello-from-env",
+    });
+  });
 
-  it('supports env param with multiple variables', async () => {
+  it("supports env param with multiple variables", async () => {
     await execCommand(`node ${pathToApp} env CUSTOM_VALUE`, {
-      env: { CUSTOM_VALUE: 'test123', OTHER_VAR: 'ignored' },
-      expectedOutput: 'test123',
-    })
-  })
+      env: { CUSTOM_VALUE: "test123", OTHER_VAR: "ignored" },
+      expectedOutput: "test123",
+    });
+  });
 
-  it('merges env with process.env', async () => {
+  it("merges env with process.env", async () => {
     // PATH should still be available from process.env
     const result = await execCommand(`node ${pathToApp} env PATH`, {
-      env: { EXTRA_VAR: 'extra' },
-    })
-    expect(result.stdout.length).toBeGreaterThan(0)
-  })
-})
+      env: { EXTRA_VAR: "extra" },
+    });
+    expect(result.stdout.length).toBeGreaterThan(0);
+  });
+});

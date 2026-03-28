@@ -14,8 +14,11 @@
     "test": "vitest",
     "test:coverage": "vitest --coverage",
     "test:ci": "npm run lint && npm run test:coverage",
-    "lint": "eslint \"lib/**/*.ts\" \"test/**/*.ts\" \"test/**/*.js\" index.ts",
-    "prettier": "prettier --write \"{lib,test}/**/*.{js,ts}\" index.ts"
+    "lint": "oxlint \"lib/**/*.ts\" \"test/**/*.ts\" \"test/**/*.js\" index.ts && oxfmt --check \"{lib,test}/**/*.{js,ts}\" index.ts",
+    "lint:fix": "oxlint --fix \"lib/**/*.ts\" \"test/**/*.ts\" \"test/**/*.js\" index.ts && oxfmt --write \"{lib,test}/**/*.{js,ts}\" index.ts"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "repository": {
     "type": "git",
@@ -29,14 +32,12 @@
   },
   "devDependencies": {
     "@types/node": "^20.19.37",
-    "@typescript-eslint/eslint-plugin": "^7.13.1",
-    "@typescript-eslint/parser": "^7.13.1",
     "@vitest/coverage-v8": "^4.0.18",
     "commander": "^11.1.0",
     "copyfiles": "^2.4.1",
     "del-cli": "^7.0.0",
-    "eslint": "^8.57.0",
-    "prettier": "^3.2.5",
+    "oxfmt": "^0.42.0",
+    "oxlint": "^1.57.0",
     "typescript": "^5.9.3",
     "vitest": "^4.0.18"
   },

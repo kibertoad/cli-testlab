@@ -1,48 +1,48 @@
-import path from 'node:path'
-import fs from 'node:fs'
-import { globSync } from 'glob'
+import path from "node:path";
+import fs from "node:fs";
+import { globSync } from "glob";
 
 export type FileTestHelperConfig = {
-  basePath?: string
-  maxRetries?: number
-  retryDelay?: number
-}
+  basePath?: string;
+  maxRetries?: number;
+  retryDelay?: number;
+};
 
 export class FileTestHelper {
-  private readonly basePath: string
-  private readonly filesToCleanup: string[] = []
-  private readonly fileGlobsToCleanup: string[] = []
-  private readonly maxRetries?: number
-  private readonly retryDelay?: number
+  private readonly basePath: string;
+  private readonly filesToCleanup: string[] = [];
+  private readonly fileGlobsToCleanup: string[] = [];
+  private readonly maxRetries?: number;
+  private readonly retryDelay?: number;
 
   public constructor(config: FileTestHelperConfig = {}) {
-    this.basePath = config.basePath || './'
-    this.maxRetries = config.maxRetries || 10
-    this.retryDelay = config.retryDelay || 5
+    this.basePath = config.basePath || "./";
+    this.maxRetries = config.maxRetries || 10;
+    this.retryDelay = config.retryDelay || 5;
   }
 
   public fileExists(filePath: string): boolean {
-    const targetPath = path.resolve(this.basePath, filePath)
-    return fs.existsSync(targetPath)
+    const targetPath = path.resolve(this.basePath, filePath);
+    return fs.existsSync(targetPath);
   }
 
   public dirExists(dirPath: string): boolean {
-    return this.fileExists(dirPath)
+    return this.fileExists(dirPath);
   }
 
   public fileGlobExists(fileGlobPath: string): number {
-    return globSync(fileGlobPath).length
+    return globSync(fileGlobPath).length;
   }
 
   public getFileTextContent(filePath: string): string {
-    const targetPath = path.resolve(this.basePath, filePath)
-    return fs.readFileSync(targetPath).toString()
+    const targetPath = path.resolve(this.basePath, filePath);
+    return fs.readFileSync(targetPath).toString();
   }
 
   public getFileGlobTextContent(fileGlobPath: string): string[] {
     return globSync(fileGlobPath).map((resolvedPath) => {
-      return fs.readFileSync(resolvedPath).toString()
-    })
+      return fs.readFileSync(resolvedPath).toString();
+    });
   }
 
   public deleteFile(
@@ -52,15 +52,15 @@ export class FileTestHelper {
       maxRetries = this.maxRetries,
       retryDelay = this.retryDelay,
     }: {
-      isPathAbsolute?: boolean
-      maxRetries?: number
-      retryDelay?: number
+      isPathAbsolute?: boolean;
+      maxRetries?: number;
+      retryDelay?: number;
     } = {},
   ): void {
-    const targetPath = isPathAbsolute ? filePath : path.resolve(this.basePath, filePath)
+    const targetPath = isPathAbsolute ? filePath : path.resolve(this.basePath, filePath);
 
     if (fs.existsSync(targetPath)) {
-      fs.rmSync(targetPath, { force: true, recursive: true, maxRetries, retryDelay })
+      fs.rmSync(targetPath, { force: true, recursive: true, maxRetries, retryDelay });
     }
   }
 
@@ -71,15 +71,15 @@ export class FileTestHelper {
       maxRetries = this.maxRetries,
       retryDelay = this.retryDelay,
     }: {
-      isPathAbsolute?: boolean
-      maxRetries?: number
-      retryDelay?: number
+      isPathAbsolute?: boolean;
+      maxRetries?: number;
+      retryDelay?: number;
     } = {},
   ): void {
-    const targetPath = isPathAbsolute ? dirPath : path.resolve(this.basePath, dirPath)
+    const targetPath = isPathAbsolute ? dirPath : path.resolve(this.basePath, dirPath);
 
     if (fs.existsSync(targetPath)) {
-      fs.rmSync(targetPath, { force: true, recursive: true, maxRetries, retryDelay })
+      fs.rmSync(targetPath, { force: true, recursive: true, maxRetries, retryDelay });
     }
   }
 
@@ -89,12 +89,12 @@ export class FileTestHelper {
       maxRetries = this.maxRetries,
       retryDelay = this.retryDelay,
     }: {
-      maxRetries?: number
-      retryDelay?: number
+      maxRetries?: number;
+      retryDelay?: number;
     } = {},
   ): void {
     for (const match of globSync(fileGlobPath)) {
-      fs.rmSync(match, { force: true, recursive: true, maxRetries, retryDelay })
+      fs.rmSync(match, { force: true, recursive: true, maxRetries, retryDelay });
     }
   }
 
@@ -108,16 +108,16 @@ export class FileTestHelper {
       willBeCleanedUp = true,
       isPathAbsolute = false,
     }: {
-      willBeCleanedUp?: boolean
-      isPathAbsolute?: boolean
+      willBeCleanedUp?: boolean;
+      isPathAbsolute?: boolean;
     } = {},
   ): void {
     if (willBeCleanedUp) {
-      this.registerForCleanup(filePath, { isPathAbsolute })
+      this.registerForCleanup(filePath, { isPathAbsolute });
     }
-    const targetPath = isPathAbsolute ? filePath : path.resolve(this.basePath, filePath)
-    mkDirByPathSync(path.dirname(targetPath))
-    fs.writeFileSync(targetPath, fileContent)
+    const targetPath = isPathAbsolute ? filePath : path.resolve(this.basePath, filePath);
+    mkDirByPathSync(path.dirname(targetPath));
+    fs.writeFileSync(targetPath, fileContent);
   }
 
   /**
@@ -129,15 +129,15 @@ export class FileTestHelper {
       willBeCleanedUp = true,
       isPathAbsolute = false,
     }: {
-      willBeCleanedUp?: boolean
-      isPathAbsolute?: boolean
+      willBeCleanedUp?: boolean;
+      isPathAbsolute?: boolean;
     } = {},
   ): void {
     if (willBeCleanedUp) {
-      this.registerForCleanup(dirPath, { isPathAbsolute })
+      this.registerForCleanup(dirPath, { isPathAbsolute });
     }
-    const targetPath = isPathAbsolute ? dirPath : path.resolve(this.basePath, dirPath)
-    mkDirByPathSync(targetPath)
+    const targetPath = isPathAbsolute ? dirPath : path.resolve(this.basePath, dirPath);
+    mkDirByPathSync(targetPath);
   }
 
   /**
@@ -148,18 +148,18 @@ export class FileTestHelper {
     {
       isPathAbsolute = false,
     }: {
-      isPathAbsolute?: boolean
+      isPathAbsolute?: boolean;
     } = {},
   ): void {
-    const targetPath = isPathAbsolute ? filePath : path.resolve(this.basePath, filePath)
-    this.filesToCleanup.push(targetPath)
+    const targetPath = isPathAbsolute ? filePath : path.resolve(this.basePath, filePath);
+    this.filesToCleanup.push(targetPath);
   }
 
   /**
    * Add glob path to a file that should be deleted after calling cleanup command
    */
   public registerGlobForCleanup(fileGlobPath: string): void {
-    this.fileGlobsToCleanup.push(fileGlobPath)
+    this.fileGlobsToCleanup.push(fileGlobPath);
   }
 
   /**
@@ -170,43 +170,48 @@ export class FileTestHelper {
       this.deleteFile(filePath, {
         maxRetries: this.maxRetries,
         retryDelay: this.retryDelay,
-      })
-    })
+      });
+    });
     this.fileGlobsToCleanup.forEach((fileGlob) => {
       for (const match of globSync(fileGlob)) {
-        fs.rmSync(match, { force: true, recursive: true, maxRetries: this.maxRetries, retryDelay: this.retryDelay })
+        fs.rmSync(match, {
+          force: true,
+          recursive: true,
+          maxRetries: this.maxRetries,
+          retryDelay: this.retryDelay,
+        });
       }
-    })
+    });
   }
 }
 
 function mkDirByPathSync(targetDir: string, { isRelativeToScript = false } = {}): string {
-  const sep = path.sep
-  const initDir = path.isAbsolute(targetDir) ? sep : ''
-  const baseDir = isRelativeToScript ? __dirname : '.'
+  const sep = path.sep;
+  const initDir = path.isAbsolute(targetDir) ? sep : "";
+  const baseDir = isRelativeToScript ? __dirname : ".";
 
   return targetDir.split(sep).reduce((parentDir, childDir) => {
-    const curDir = path.resolve(baseDir, parentDir, childDir)
+    const curDir = path.resolve(baseDir, parentDir, childDir);
     try {
-      fs.mkdirSync(curDir)
+      fs.mkdirSync(curDir);
     } catch (err: any) {
-      if (err.code === 'EEXIST') {
+      if (err.code === "EEXIST") {
         // curDir already exists!
-        return curDir
+        return curDir;
       }
 
       // To avoid `EISDIR` error on Mac and `EACCES`-->`ENOENT` and `EPERM` on Windows.
-      if (err.code === 'ENOENT') {
+      if (err.code === "ENOENT") {
         // Throw the original parentDir error on curDir `ENOENT` failure.
-        throw new Error(`EACCES: permission denied, mkdir '${parentDir}'`)
+        throw new Error(`EACCES: permission denied, mkdir '${parentDir}'`);
       }
 
-      const caughtErr = ['EACCES', 'EPERM', 'EISDIR'].indexOf(err.code) > -1
+      const caughtErr = ["EACCES", "EPERM", "EISDIR"].indexOf(err.code) > -1;
       if (!caughtErr || (caughtErr && curDir === path.resolve(targetDir))) {
-        throw err // Throw if it's just the last created dir.
+        throw err; // Throw if it's just the last created dir.
       }
     }
 
-    return curDir
-  }, initDir)
+    return curDir;
+  }, initDir);
 }
