@@ -1,7 +1,6 @@
 import path from 'node:path'
 import fs from 'node:fs'
 import { globSync } from 'glob'
-import { sync as deleteSync } from 'rimraf'
 
 export type FileTestHelperConfig = {
   basePath?: string
@@ -94,7 +93,9 @@ export class FileTestHelper {
       retryDelay?: number
     } = {},
   ): void {
-    deleteSync(fileGlobPath, { glob: true, maxRetries, retryDelay })
+    for (const match of globSync(fileGlobPath)) {
+      fs.rmSync(match, { force: true, recursive: true, maxRetries, retryDelay })
+    }
   }
 
   /**
@@ -172,7 +173,9 @@ export class FileTestHelper {
       })
     })
     this.fileGlobsToCleanup.forEach((fileGlob) => {
-      deleteSync(fileGlob, { glob: true, maxRetries: this.maxRetries, retryDelay: this.retryDelay })
+      for (const match of globSync(fileGlob)) {
+        fs.rmSync(match, { force: true, recursive: true, maxRetries: this.maxRetries, retryDelay: this.retryDelay })
+      }
     })
   }
 }
