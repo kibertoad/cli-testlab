@@ -84,8 +84,17 @@ export class FileTestHelper {
     }
   }
 
-  public deleteFileGlob(fileGlobPath: string): void {
-    deleteSync(fileGlobPath, { glob: true })
+  public deleteFileGlob(
+    fileGlobPath: string,
+    {
+      maxRetries = this.maxRetries,
+      retryDelay = this.retryDelay,
+    }: {
+      maxRetries?: number
+      retryDelay?: number
+    } = {},
+  ): void {
+    deleteSync(fileGlobPath, { glob: true, maxRetries, retryDelay })
   }
 
   /**
@@ -163,7 +172,7 @@ export class FileTestHelper {
       })
     })
     this.fileGlobsToCleanup.forEach((fileGlob) => {
-      deleteSync(fileGlob, { glob: true })
+      deleteSync(fileGlob, { glob: true, maxRetries: this.maxRetries, retryDelay: this.retryDelay })
     })
   }
 }
