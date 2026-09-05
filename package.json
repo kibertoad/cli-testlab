@@ -31,7 +31,7 @@
     "glob": "^13.0.6"
   },
   "devDependencies": {
-    "@types/node": "^26.4.1",
+    "@types/node": "^22.20.1",
     "@vitest/coverage-v8": "^5.0.0",
     "commander": "^15.0.0",
     "copyfiles": "^2.4.1",
