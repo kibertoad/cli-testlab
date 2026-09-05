@@ -25,21 +25,21 @@
     "url": "git://github.com/kibertoad/cli-testlab.git"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22.12.0"
   },
   "dependencies": {
     "glob": "^13.0.6"
   },
   "devDependencies": {
-    "@types/node": "^24.13.3",
-    "@vitest/coverage-v8": "^4.1.11",
-    "commander": "^13.1.0",
+    "@types/node": "^26.4.1",
+    "@vitest/coverage-v8": "^5.0.0",
+    "commander": "^15.0.0",
     "copyfiles": "^2.4.1",
     "del-cli": "^7.0.0",
     "oxfmt": "^0.66.0",
     "oxlint": "^1.81.0",
     "typescript": "^7.0.2",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.0"
   },
   "files": [
     "README.md",
