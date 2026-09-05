@@ -31,15 +31,15 @@
     "glob": "^13.0.6"
   },
   "devDependencies": {
-    "@types/node": "^20.19.37",
-    "@vitest/coverage-v8": "^4.0.18",
-    "commander": "^11.1.0",
+    "@types/node": "^24.13.3",
+    "@vitest/coverage-v8": "^4.1.11",
+    "commander": "^13.1.0",
     "copyfiles": "^2.4.1",
     "del-cli": "^7.0.0",
-    "oxfmt": "^0.42.0",
-    "oxlint": "^1.57.0",
-    "typescript": "^5.9.3",
-    "vitest": "^4.0.18"
+    "oxfmt": "^0.66.0",
+    "oxlint": "^1.81.0",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.11"
   },
   "files": [
     "README.md",
