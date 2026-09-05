@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const program = require("commander/typings");
+const { program } = require("commander");
 
 program.parse(process.argv);
 

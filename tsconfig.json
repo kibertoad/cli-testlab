@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "dist",
-    "module": "commonjs",
+    "module": "node18",
     "target": "ES2015",
     "sourceMap": true,
     "declaration": true,
@@ -9,7 +9,6 @@
     "types": ["node", "vitest/globals"],
     "skipLibCheck": true,
     "strict": true,
-    "moduleResolution": "node",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
@@ -18,7 +17,6 @@
     "noImplicitThis": true,
     "strictNullChecks": true,
     "importHelpers": false,
-    "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
